@@ -1,15 +1,42 @@
+import { useState, useEffect } from 'react';
+import { useAuthStore } from '../store/authStore';
+
 const Navbar = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const { accessToken, logout } = useAuthStore();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    alert('로그아웃 되었습니다.');
+    window.location.href = '/';
+  };
+
   return (
     <nav className="navbar navbar-expand-lg blur border-radius-sm top-0 z-index-3 shadow position-sticky py-3 start-0 end-0">
       <div className="container px-1">
-        <a className="navbar-brand font-weight-bolder ms-lg-0 " href="https://www.creative-tim.com/astro">Astro Ecommerce</a>
-        <button className="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <a className="navbar-brand font-weight-bolder ms-lg-0 " href="/">
+          Astro Ecommerce
+        </a>
+        <button 
+          className="navbar-toggler shadow-none ms-2" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navigation" 
+          aria-controls="navigation" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon mt-2">
             <span className="navbar-toggler-bar bar1"></span>
             <span className="navbar-toggler-bar bar2"></span>
             <span className="navbar-toggler-bar bar3"></span>
           </span>
         </button>
+        
         <div className="collapse navbar-collapse" id="navigation">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
@@ -42,6 +69,25 @@ const Navbar = () => {
                 <i className="fab text-lg fa-discord"></i>
               </a>
             </li>
+
+            <li className="nav-item d-flex align-items-center">
+              {isMounted && accessToken ? (
+                <button 
+                  className="btn btn-sm btn-danger mb-0 ms-2"
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </button>
+              ) : (
+                <a 
+                  className="btn btn-sm btn-primary mb-0 ms-2" 
+                  href="/login"
+                >
+                  Log In
+                </a>
+              )}
+            </li>
+
           </ul>
         </div>
       </div>
