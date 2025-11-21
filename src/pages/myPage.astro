@@ -1,0 +1,20 @@
+---
+import Navbar from '../components/Navbar';
+import MyPageComp from '../components/MyPage'; 
+import '../../assets/scss/astro-ecommerce.scss';
+---
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>마이페이지 - Happy Friends</title>
+  </head>
+  <body class="bg-gray-100">
+    <Navbar client:load />
+    
+    <main class="min-vh-100 py-5">
+      <MyPageComp client:only="react" />
+    </main>
+  </body>
+</html>
