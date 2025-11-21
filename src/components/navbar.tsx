@@ -72,12 +72,20 @@ const Navbar = () => {
 
             <li className="nav-item d-flex align-items-center">
               {isMounted && accessToken ? (
-                <button 
-                  className="btn btn-sm btn-danger mb-0 ms-2"
-                  onClick={handleLogout}
-                >
-                  Log Out
-                </button>
+                <>
+                  <a 
+                    className="btn btn-sm btn-info mb-0 ms-2" 
+                    href="/myPage"
+                  >
+                    My Page
+                  </a>
+                  <button 
+                    className="btn btn-sm btn-danger mb-0 ms-2"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </button>
+                </>
               ) : (
                 <a 
                   className="btn btn-sm btn-primary mb-0 ms-2" 
