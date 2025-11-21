@@ -8,4 +8,6 @@ dist/
 package-lock.json
 .astro/
 .env.local
-src/api/
+src/api/admin
+src/api/common
+src/api/user
