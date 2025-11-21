@@ -9,10 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "gen:api:common": "swagger-typescript-api -p http://localhost:8080/v3/api-docs/common-api -o ./src/api/common -n commonApi.ts",
-    "gen:api:admin": "swagger-typescript-api -p http://localhost:8080/v3/api-docs/admin-api -o ./src/api/admin -n adminApi.ts",
-    "gen:api:user": "swagger-typescript-api -p http://localhost:8080/v3/api-docs/user-api -o ./src/api/user -n userApi.ts",
-    "gen:api": "npm run gen:api:common && npm run gen:api:admin && npm run gen:api:user"
+    "gen:api": "node generate-api.js",
+    "gen:api:local": "node generate-api.js local"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.2",
@@ -30,6 +28,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "dotenv": "^17.2.3",
     "sass": "^1.55.0",
     "swagger-typescript-api": "^12.0.0"
   }
