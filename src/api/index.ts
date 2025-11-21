@@ -35,6 +35,8 @@ const apiConfig: ApiConfig = {
 
       return response;
     } catch (error) {
+      console.error("API 요청 실패! 주소 :", url);
+      console.error("에러 상세 : ", error);
       // 네트워크 에러 등을 ErrorHandler로 넘기기
       ErrorHandler.handleError(error);
       throw error;
