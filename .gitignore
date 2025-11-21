@@ -7,3 +7,5 @@ build-product/
 dist/
 package-lock.json
 .astro/
+.env.local
+src/api/
