@@ -12,7 +12,7 @@
   overflow: hidden;
 }
 
-/* 카드 디자인 */
+/* 카드 디자인 - 투명 배경 유지 */
 .signup-card {
   background: transparent !important; 
   box-shadow: none !important;       
@@ -52,13 +52,13 @@
   display: block;
 }
 
-/* 입력창 스타일 (로그인 폼과 통일) */
+/* 입력창 스타일 */
 .custom-input {
   height: 48px;
   border-radius: 10px !important;
   border: 1px solid #e0e0e0;
   font-size: 15px;
-  padding-left: 15px !important; /* 아이콘이 없으므로 여백 조정 */
+  padding-left: 15px !important;
   background-color: #fcfcfc;
   transition: all 0.3s ease;
 }
@@ -69,13 +69,13 @@
   background-color: #fff;
 }
 
-/* 읽기 전용 인풋 (주소 등) */
+/* 읽기 전용 인풋 */
 .custom-input[readonly] {
   background-color: #f2f2f2;
-  cursor: pointer; /* 클릭 가능하다는 느낌 */
+  cursor: pointer;
 }
 
-/* 버튼 스타일 (로그인 폼과 동일) */
+/* 메인 버튼 스타일 */
 .btn-brand {
   background-color: #e94d1c !important;
   border-color: #e94d1c !important;
@@ -110,7 +110,7 @@
   box-shadow: none;
 }
 
-/* 주소 검색 버튼 */
+/* 주소 검색 버튼 (필요 시 유지) */
 .btn-outline-brand {
   color: #e94d1c;
   border-color: #e94d1c;
@@ -131,23 +131,75 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.6); /* 조금 더 어둡게 */
+  background-color: rgba(0,0,0,0.6);
   z-index: 9999;
-  backdrop-filter: blur(3px); /* 블러 효과 추가 */
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 모달 창 */
 .modal-content-custom {
   width: 100%;
   max-width: 500px;
-  height: 600px; /* 높이 고정 */
+  height: 600px;
   background: white;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 15px 40px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
+}
+
+
+.id-input-group {
+  display: flex !important; /* 무조건 가로 배치 */
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.id-input-group .custom-input {
+  flex-grow: 1 !important; /* 남은 공간 차지하기 */
+  width: auto !important;  /* 100% 강제 해제 */
+  margin-bottom: 0 !important; /* 불필요한 여백 제거 */
+}
+
+.btn-check {
+  display: inline-block !important; /* 숨겨지지 않게 */
+  flex-shrink: 0 !important; /* 공간 부족해도 찌그러지지 않기 (핵심!) */
+  
+  height: 48px !important;
+  line-height: 46px !important; /* 텍스트 수직 정렬 */
+  padding: 0 20px !important;
+  
+  background-color: #fff !important;
+  border: 1px solid #e94d1c !important;
+  color: #e94d1c !important;
+  
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important; /* 글자 줄바꿈 방지 */
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 버튼 호버 효과 */
+.btn-check:hover {
+  background-color: #e94d1c !important;
+  color: #fff !important;
+}
+
+/* 비활성화 상태 */
+.btn-check:disabled {
+  border-color: #ddd !important;
+  color: #aaa !important;
+  background-color: #f5f5f5 !important;
+  cursor: not-allowed !important;
+}
+
+.swal2-container {
+  z-index: 20000 !important; 
 }
