@@ -20,6 +20,22 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v3
+
+      - name: Create userApi.ts file
+        run: |
+          mkdir -p src/api/user
+          echo "${{ secrets.USER_API_TS }}" > src/api/user/userApi.ts
+      
+      - name : Create adminApi.ts file
+        run : |
+          mkdir -p src/api/admin
+          echo "${{ secrets.ADMIN_API_TS }}" > src/api/admin/adminApi.ts
+
+      - name : Create commonApi.ts file
+        run : |
+          mkdir -p src/api/common
+          echo "${{ secrets.COMMON_API_TS }}" > src/api/admin/commonApi.ts
+
       - name: Install, build, and upload your site
         uses: withastro/action@v4
         # with:
