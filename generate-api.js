@@ -7,7 +7,7 @@ const isLocal = process.argv[2] === 'local';
 const envFile = isLocal ? '.env.local' : '.env';
 
 dotenv.config({ path: envFile });
-const BASE_URL = process.env.PUBLIC_API_URL || 'http://localhost:8081';
+const BASE_URL = process.env.PUBLIC_API_URL || '';
 
 console.log(`=============================================`);
 console.log(`읽어온 설정 파일: ${envFile}`);
