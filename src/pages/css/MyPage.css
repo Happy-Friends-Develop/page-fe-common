@@ -178,3 +178,131 @@ body {
         justify-content: flex-start;
     }
 }
+
+/* MyPage.css 추가 내용 */
+
+/* 수정 모달 오버레이 (배경 어둡게) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+/* 모달 창 디자인 */
+.edit-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh; /* 화면보다 크면 스크롤 */
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.btn-close-custom {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+}
+
+/* 폼 스타일 */
+.edit-form-group {
+  margin-bottom: 15px;
+}
+
+.edit-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.edit-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.edit-input:focus {
+  border-color: #e94d1c;
+  outline: none;
+}
+
+.edit-input[readonly] {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+/* 모달 하단 버튼 */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn-save {
+  flex: 1;
+  background-color: #e94d1c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background-color: #d03e12;
+}
+
+.btn-cancel {
+  flex: 1;
+  background-color: #f1f3f5;
+  color: #495057;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #e9ecef;
+}
