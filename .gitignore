@@ -5,7 +5,6 @@ node_modules/
 build-product/
 .DS_Store
 dist/
-package-lock.json
 .astro/
 .env.local
 src/api/admin
