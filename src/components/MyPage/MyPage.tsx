@@ -1,9 +1,9 @@
 import React from "react";
-import { useMyPageLogic } from "../components/MyPage/useMyPageLogic";
-import ProfileHeader from "../components/MyPage/ProfileHeader";
-import InfoCard from "../components/MyPage/InfoCard";
-import EditUserModal from "../components/MyPage/EditUserModal";
-import "./css/MyPage.css";
+import { useMyPageLogic } from "./useMyPageLogic";
+import ProfileHeader from "./ProfileHeader";
+import InfoCard from "./InfoCard";
+import EditUserModal from "./EditUserModal";
+import "./MyPage.css";
 
 const MyPage = () => {
   // 1. 훅에서 모든 기능과 상태를 가져옵니다.
