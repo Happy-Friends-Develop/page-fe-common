@@ -1,51 +1,14 @@
-import React, { useState } from 'react';
-import { commonClient } from '../../api/index'; 
-import { setToken } from '../../store/authStore';
-import './LoginForm.css';
+import React from 'react';
+import { useLogin } from './useLogin';
+import './LoginForm.css'; 
 
 const LoginForm = () => {
-  const [loginId, setLoginId] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); 
-
-    if (!loginId || !pwd) {
-      alert('아이디와 비밀번호를 입력해주세요.');
-      return;
-    }
-
-    setIsLoading(true); 
-
-    try {
-      const response = await commonClient.api.login({
-        loginId: loginId,
-        pwd: pwd,
-      },
-      { format : 'json' }
-    );
-
-      const { success, data: token, errorMessage } = response.data;
-
-      if (success && token) {
-        setToken(token); 
-        alert('로그인 성공');
-        window.location.href = '/'; 
-      } else {
-        alert(errorMessage || '로그인에 실패했습니다.');
-      }
-
-    } catch (error) {
-      console.error('Login Error:', error);
-      alert('서버 통신 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false); 
-    }
-  };
+  const { formState, handlers } = useLogin();
+  const { loginId, pwd, isLoading } = formState;
+  const { handleChangeId, handleChangePwd, handleLogin } = handlers;
 
   return (
-    <div className="login-container">
+    <div id="login-page-wrapper" className="login-container">
       <div className="login-card">
         {/* 헤더 영역 */}
         <div className="text-center mb-4">
@@ -56,26 +19,26 @@ const LoginForm = () => {
         <form onSubmit={handleLogin}>
           {/* 아이디 입력창 */}
           <div className="custom-input-group">
-            <i className="bi bi-person input-icon"></i> {/* 부트스트랩 아이콘 */}
+            <i className="bi bi-person-fill input-icon"></i>
             <input
               type="text"
               className="form-control custom-input"
               placeholder="아이디"
               value={loginId}
-              onChange={(e) => setLoginId(e.target.value)}
+              onChange={handleChangeId}
               disabled={isLoading}
             />
           </div>
           
           {/* 비밀번호 입력창 */}
           <div className="custom-input-group">
-            <i className="bi bi-lock input-icon"></i> {/* 부트스트랩 아이콘 */}
+            <i className="bi bi-lock-fill input-icon"></i>
             <input
               type="password"
               className="form-control custom-input"
               placeholder="비밀번호"
               value={pwd}
-              onChange={(e) => setPwd(e.target.value)}
+              onChange={handleChangePwd}
               disabled={isLoading}
             />
           </div>

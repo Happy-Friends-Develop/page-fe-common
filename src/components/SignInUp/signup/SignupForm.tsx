@@ -1,96 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DaumPostcode from 'react-daum-postcode';
-import { userClient } from '../../api/index';
-import type { UserRequest } from '../../api/user/userApi';
-import { showSuccess, showError } from '../../utils/swal';
-import CheckIdModal from './checkId/CheckIdModal';
+import { useSignup } from './useSignup';
+import CheckIdModal from '../checkId/CheckIdModal';
 import './SignupForm.css';
 
 const SignupForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpenPost, setIsOpenPost] = useState(false);
-  const [isIdModalOpen, setIsIdModalOpen] = useState(false);
-  const [detailAddress, setDetailAddress] = useState('');
-
-  const [formData, setFormData] = useState<UserRequest>({
-    id: '',
-    password: '',
-    name: '',
-    nickname: '',
-    phone: '',
-    email: '',
-    address: '',
-    birth: '',
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleIdComplete = (validId: string) => {
-    setFormData(prev => ({ ...prev, id: validId }));
-    setIsIdModalOpen(false); // 모달 닫기
-  };
-
-  const handleCompletePost = (data: any) => {
-    let fullAddress = data.address; 
-    let extraAddress = ''; 
-    if (data.addressType === 'R') {
-      if (data.bname !== '') extraAddress += data.bname;
-      if (data.buildingName !== '') extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
-      fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
-    }
-    setFormData(prev => ({ ...prev, address: fullAddress }));
-    setIsOpenPost(false);
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (Object.values(formData).some(val => val === '') || detailAddress === '') {
-      showError('입력 오류', '모든 항목을 빠짐없이 입력해주세요.');
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const finalData = {
-        ...formData,
-        address: `${formData.address} ${detailAddress}`
-      };
-
-      const response = await userClient.api.register(finalData, { format: 'json' });
-      
-      if (response.ok) {
-        await showSuccess('가입 완료', '회원가입이 완료되었습니다! 로그인 해주세요.');
-        window.location.href = '/login';
-      } else {
-        const errorData = response.data as any;
-        showError('가입 실패', errorData?.errorMessage || '회원가입에 실패했습니다.');
-      }
-
-    } catch (error) {
-      console.error('Signup Error:', error);
-      showError('오류', '서버 통신 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // 훅에서 모든 로직 가져오기
+  const { formState, modalState, handlers } = useSignup();
+  
+  const { formData, detailAddress, isLoading } = formState;
+  const { isOpenPost, isIdModalOpen } = modalState;
+  
   return (
     <div className="signup-container">
       
+      {/* 주소 검색 모달 */}
       {isOpenPost && (
-        <div className="modal-overlay" onClick={() => setIsOpenPost(false)}>
+        <div className="modal-overlay" onClick={modalState.closePost}>
           <div className="modal-content-custom" onClick={(e) => e.stopPropagation()}>
             <div className="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
               <h5 className="m-0 fw-bold">주소 검색</h5>
-              <button type="button" className="btn-close" onClick={() => setIsOpenPost(false)}></button>
+              <button type="button" className="btn-close" onClick={modalState.closePost}></button>
             </div>
             <div style={{ flex: 1 }}>
-               <DaumPostcode onComplete={handleCompletePost} style={{ height: '100%' }} />
+               <DaumPostcode onComplete={handlers.handleAddressComplete} style={{ height: '100%' }} />
             </div>
           </div>
         </div>
@@ -99,8 +32,8 @@ const SignupForm = () => {
       {/* 아이디 확인 모달 */}
       {isIdModalOpen && (
         <CheckIdModal 
-          onClose={() => setIsIdModalOpen(false)} 
-          onComplete={handleIdComplete} 
+          onClose={modalState.closeIdModal} 
+          onComplete={handlers.handleIdComplete} 
         />
       )}
 
@@ -108,8 +41,9 @@ const SignupForm = () => {
         <h3 className="signup-title">회원가입</h3>
         <p className="signup-subtitle">Happy Friends의 멤버가 되어보세요!</p>
         
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handlers.handleSignup}>
           
+          {/* 아이디 */}
           <div className="form-group">
             <label className="form-label">아이디</label>
             <input 
@@ -118,7 +52,7 @@ const SignupForm = () => {
               className="form-control custom-input" 
               value={formData.id} 
               readOnly 
-              onClick={() => setIsIdModalOpen(true)}
+              onClick={modalState.openIdModal}
               placeholder="아이디 (클릭)" 
               required 
               style={{ cursor: 'pointer', backgroundColor: '#fff' }} 
@@ -129,7 +63,7 @@ const SignupForm = () => {
           <div className="form-group">
             <label className="form-label">비밀번호</label>
             <input type="password" name="password" className="form-control custom-input" 
-              value={formData.password} onChange={handleChange} placeholder="비밀번호를 입력하세요" required />
+              value={formData.password} onChange={handlers.handleChange} placeholder="비밀번호를 입력하세요" required />
           </div>
 
           {/* 이름 & 닉네임 */}
@@ -137,12 +71,12 @@ const SignupForm = () => {
             <div className="col-md-6 form-group">
               <label className="form-label">이름</label>
               <input type="text" name="name" className="form-control custom-input" 
-                value={formData.name} onChange={handleChange} placeholder="이름 입력" required />
+                value={formData.name} onChange={handlers.handleChange} placeholder="이름 입력" required />
             </div>
             <div className="col-md-6 form-group">
               <label className="form-label">닉네임</label>
               <input type="text" name="nickname" className="form-control custom-input" 
-                value={formData.nickname} onChange={handleChange} placeholder="별명 입력" required />
+                value={formData.nickname} onChange={handlers.handleChange} placeholder="별명 입력" required />
             </div>
           </div>
 
@@ -150,21 +84,21 @@ const SignupForm = () => {
           <div className="form-group">
             <label className="form-label">전화번호</label>
             <input type="tel" name="phone" className="form-control custom-input" 
-              value={formData.phone} onChange={handleChange} placeholder="010-0000-0000" required />
+              value={formData.phone} onChange={handlers.handleChange} placeholder="010-0000-0000" required />
           </div>
 
           {/* 이메일 */}
           <div className="form-group">
             <label className="form-label">이메일</label>
             <input type="email" name="email" className="form-control custom-input" 
-              value={formData.email} onChange={handleChange} placeholder="example@email.com" required />
+              value={formData.email} onChange={handlers.handleChange} placeholder="example@email.com" required />
           </div>
 
           {/* 생년월일 */}
           <div className="form-group">
             <label className="form-label">생년월일</label>
             <input type="date" name="birth" className="form-control custom-input" 
-              value={formData.birth} onChange={handleChange} required />
+              value={formData.birth} onChange={handlers.handleChange} required />
           </div>
 
           {/* 주소 입력 */}
@@ -178,7 +112,7 @@ const SignupForm = () => {
               placeholder="주소를 검색해주세요 (클릭)" 
               readOnly 
               required 
-              onClick={() => setIsOpenPost(true)}
+              onClick={modalState.openPost}
               style={{ cursor: 'pointer' }} 
             />
             <input 
@@ -186,7 +120,7 @@ const SignupForm = () => {
               className="form-control custom-input" 
               placeholder="상세 주소를 입력하세요" 
               value={detailAddress}
-              onChange={(e) => setDetailAddress(e.target.value)}
+              onChange={handlers.handleDetailAddressChange}
               required
             />
           </div>
