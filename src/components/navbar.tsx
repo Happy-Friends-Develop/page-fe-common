@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '../store/authStore';
+import { useStore } from '@nanostores/react';
+import { $accessToken, logout } from '../store/authStore';
 
 const Navbar = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const { accessToken, logout } = useAuthStore();
+  // useStore로 토큰 상태 실시간 감시
+  const accessToken = useStore($accessToken);
 
   useEffect(() => {
     setIsMounted(true);

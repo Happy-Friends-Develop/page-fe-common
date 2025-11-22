@@ -1,7 +1,7 @@
 import { Api as UserApi, type ApiConfig } from './user/userApi';
 import { Api as AdminApi } from './admin/adminApi';
 import { Api as CommonApi } from './common/commonApi';
-import { useAuthStore } from '../store/authStore'; 
+import { $accessToken, logout } from '../store/authStore'; 
 import { ErrorHandler } from '../utils/errorHandler';
 
 // 공통 설정 (토큰 자동 주입 & 에러 처리)
@@ -11,7 +11,7 @@ const apiConfig: ApiConfig = {
 
   // 요청 보낼 때마다 토큰이 있으면 자동으로 헤더에 넣기
   securityWorker: (securityData) => {
-    const { accessToken } = useAuthStore.getState();
+    const accessToken = $accessToken.get();
     
     if (accessToken) {
       return {
@@ -29,8 +29,12 @@ const apiConfig: ApiConfig = {
 
       // 401(인증 만료) 에러가 뜨면 바로 로그아웃 시키기
       if (response.status === 401) {
-        useAuthStore.getState().logout();
-        // 필요하다면 여기서 페이지 이동 로직 추가 (window.location.href = '/login')
+        logout();
+        // 로그인 페이지로 튕겨내기
+        if (typeof window !== 'undefined') {
+          alert("인증이 만료되었습니다. 다시 로그인해주세요.");
+          window.location.href = '/login';
+        }
       }
 
       return response;

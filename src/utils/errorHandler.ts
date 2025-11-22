@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../store/authStore'; 
+import { logout } from '../store/authStore'; 
 
 // 에러 타입 (Enum)
 export enum ErrorType {
@@ -19,7 +19,7 @@ export enum ErrorType {
 // 에러 응답 인터페이스
 export interface ApiErrorResponse {
   errorMessage?: string;
-  message?: string; // 백엔드에서 message로 줄 수도 있어서 추가
+  message?: string;
   errorCode?: string | number;
   errors?: Record<string, string[]>;
   [key: string]: any;
@@ -56,11 +56,9 @@ export class ErrorHandler {
     }
 
     const { status, data } = error.response;
-    // 백엔드 에러 메시지 우선순위: errorMessage > message > 기본 문구
     let errorMessage = data?.errorMessage || data?.message || '알 수 없는 오류가 발생했습니다.';
     let errorType = ErrorType.UNKNOWN;
 
-    // 토큰 관련 에러 감지 (백엔드 메시지 기준)
     const isTokenError = errorMessage.includes('JWT') || errorMessage.includes('token');
 
     switch (status) {
@@ -69,13 +67,13 @@ export class ErrorHandler {
         if (isTokenError) {
             errorType = ErrorType.TOKEN_INVALID;
             errorMessage = '로그인 정보가 유효하지 않습니다.';
-            useAuthStore.getState().logout();
+            logout();
         }
         break;
       case 401:
         errorType = ErrorType.TOKEN_EXPIRED;
         errorMessage = '인증이 만료되었습니다. 다시 로그인해주세요.';
-        useAuthStore.getState().logout(); // 강제 로그아웃
+        logout(); 
         break;
       case 403:
         errorType = ErrorType.AUTHORIZATION;
@@ -104,13 +102,12 @@ export class ErrorHandler {
     };
   }
 
-  // 에러 메시지 표시 (Toast)
+  // 에러 메시지 표시 (Toast) - 그대로 유지
   static showErrorMessage(error: AppError): void {
-    // 중복 토스트 방지 로직을 추가하면 더 좋습니다.
     if (!toast.isActive(String(error.code))) {
         toast.error(error.message, {
-            toastId: String(error.code), // 같은 에러 코드는 중복 표시 안 함
-            position: "top-center", // 보기 편한 위치
+            toastId: String(error.code),
+            position: "top-center",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -120,7 +117,7 @@ export class ErrorHandler {
     }
   }
 
-  // 메인 처리 함수
+  // 메인 처리 함수 - 그대로 유지
   static handleError(error: any): AppError {
     let appError: AppError;
 
@@ -134,10 +131,7 @@ export class ErrorHandler {
       };
     }
 
-    // 콘솔 로그 (개발용)
     console.error(`[${appError.type}] ${appError.message}`, appError);
-
-    // 사용자에게 알림 표시
     this.showErrorMessage(appError);
 
     return appError;

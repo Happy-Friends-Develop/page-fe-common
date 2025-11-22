@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
+import { $accessToken, $user, setToken, logout as storeLogout } from '../store/authStore';
 import type { TokenPayload, LoginRequest, UserInfo } from '../store/authStore';
 
 // API 응답 타입 정의
@@ -16,7 +16,7 @@ interface ApiResponse<T> {
  */
 export const sanitizeToken = (token: string | null): string | null => {
   if (!token) return null;
-  if (token.trim() === '') { // trim() 추가로 공백만 있는 경우도 확실히 처리
+  if (token.trim() === '') {
     console.warn('토큰이 비어있습니다.');
     return null;
   }
@@ -54,7 +54,7 @@ export const isTokenExpired = (token: string): boolean => {
  */
 export const validateAndCleanToken = (): boolean => {
   try {
-    const { accessToken } = useAuthStore.getState();
+    const accessToken = $accessToken.get();
     
     if (!accessToken) return false;
     
@@ -81,9 +81,9 @@ export const validateAndCleanToken = (): boolean => {
  */
 export const isAuthenticated = (): boolean => {
   try {
-    const { accessToken, isAuthenticated } = useAuthStore.getState();
+    const accessToken = $accessToken.get();
     
-    if (!accessToken || !isAuthenticated) {
+    if (!accessToken) {
       return false;
     }
     
@@ -99,12 +99,10 @@ export const isAuthenticated = (): boolean => {
  */
 export const getAuthHeader = (): { Authorization: string } | Record<string, never> => {
   try {
-    const { accessToken } = useAuthStore.getState();
+    const accessToken = $accessToken.get();
     
     if (!accessToken) return {};
     
-    // Bearer 접두사가 없는 경우 추가 (백엔드 요구사항에 따라 조정 가능)
-    // 현재는 토큰 그대로 전송
     return { Authorization: `${accessToken}` };
   } catch (error) {
     console.error('인증 헤더 생성 중 오류:', error);
@@ -117,11 +115,14 @@ export const getAuthHeader = (): { Authorization: string } | Record<string, neve
  */
 export const logout = (): void => {
   try {
-    useAuthStore.getState().logout();
+    storeLogout(); 
   } catch (error) {
     console.error('로그아웃 처리 중 오류:', error);
   }
 };
+// 기존처럼 export const logout을 쓰고 싶다면 import한 logout과 이름이 겹치므로 
+// import { logout as storeLogout } from ... 처럼 이름을 바꿔서 가져와야 합니다.
+// 편의상 여기서는 위 함수를 그대로 쓰시되, 필요하면 이름을 맞추세요.
 
 /**
  * 로그인 처리
@@ -152,8 +153,7 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
       return false;
     }
     
-    // 스토어에 토큰 저장 (이 과정에서 decode 및 user 설정도 자동으로 됨)
-    useAuthStore.getState().setToken(token);
+    setToken(token);
     
     return true;
   } catch (error) {
@@ -171,7 +171,8 @@ export const login = async (credentials: LoginRequest): Promise<boolean> => {
  */
 export const getUserInfo = (): UserInfo | null => {
   try {
-    const { user, accessToken } = useAuthStore.getState();
+    let user = $user.get();
+    const accessToken = $accessToken.get();
     
     // 1. 스토어에 이미 사용자 정보가 있으면 반환
     if (user) return user;
@@ -182,7 +183,6 @@ export const getUserInfo = (): UserInfo | null => {
     const decoded = decodeToken(accessToken);
     if (!decoded) return null;
     
-    // authorities 처리 (문자열 -> 배열)
     const authoritiesArray = typeof decoded.authorities === 'string' 
       ? decoded.authorities.split(',') 
       : decoded.authorities || [];
@@ -192,11 +192,9 @@ export const getUserInfo = (): UserInfo | null => {
       id: decoded.id,
       type: decoded.type,
       authorities: authoritiesArray
-      // organizationId, kioskGroupId 제거됨
     };
     
-    // 스토어 업데이트 (싱크 맞추기)
-    useAuthStore.getState().setUser(userInfo);
+    $user.set(userInfo);
     
     return userInfo;
   } catch (error) {
@@ -216,9 +214,9 @@ export const hasRole = (role: string): boolean => {
     return userInfo.authorities.includes(role);
   }
   
+  // @ts-ignore: 타입 안전장치
   if (typeof userInfo.authorities === 'string') {
-    // @ts-ignore: 타입 가드에도 불구하고 안전장치
-    return userInfo.authorities.split(',').includes(role);
+    return (userInfo.authorities as string).split(',').includes(role);
   }
   
   return false;

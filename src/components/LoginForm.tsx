@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
 import { commonClient } from '../api/index'; 
-import { useAuthStore } from '../store/authStore';
+import { setToken } from '../store/authStore'; 
 
 const LoginForm = () => {
   const [loginId, setLoginId] = useState('');
   const [pwd, setPwd] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가 (중복 클릭 방지)
-
-  // 스토어에서 setToken 액션만 가져오기
-  // (나머지 디코딩, 유저 설정 등은 setToken 내부에서 알아서 처리함)
-  const setToken = useAuthStore((state) => state.setToken);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault(); // 폼 제출 시 새로고침 방지
+    e.preventDefault(); 
 
     if (!loginId || !pwd) {
       alert('아이디와 비밀번호를 입력해주세요.');
       return;
     }
 
-    setIsLoading(true); // 로딩 시작
+    setIsLoading(true); 
 
     try {
-      // 1. API 호출
       const response = await commonClient.api.login({
         loginId: loginId,
         pwd: pwd,
@@ -30,15 +25,13 @@ const LoginForm = () => {
       { format : 'json' }
     );
 
-      // 2. 응답 데이터 확인 (commonApi.ts의 RespString 인터페이스 참고)
       const { success, data: token, errorMessage } = response.data;
 
       if (success && token) {
-
-        setToken(token);
+        setToken(token); 
         
         alert('로그인 성공!');
-        window.location.href = '/'; // 메인 페이지로 이동
+        window.location.href = '/'; 
       } else {
         alert(errorMessage || '로그인에 실패했습니다.');
       }
@@ -47,7 +40,7 @@ const LoginForm = () => {
       console.error('Login Error:', error);
       alert('서버 통신 중 오류가 발생했습니다.');
     } finally {
-      setIsLoading(false); // 로딩 끝
+      setIsLoading(false); 
     }
   };
 
