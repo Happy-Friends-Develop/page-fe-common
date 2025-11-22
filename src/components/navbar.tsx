@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { $accessToken, logout } from '../store/authStore';
 
+// [중요] 새로 만든 CSS 파일 임포트
+import './Navbar.css';
+
 const Navbar = () => {
   const [isMounted, setIsMounted] = useState(false);
-  // useStore로 토큰 상태 실시간 감시
   const accessToken = useStore($accessToken);
 
   useEffect(() => {
@@ -12,9 +14,11 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    logout();
-    alert('로그아웃 되었습니다.');
-    window.location.href = '/';
+    if (confirm("로그아웃 하시겠습니까?")) { // 실수 방지용 확인창 추가 (선택사항)
+      logout();
+      alert('로그아웃 되었습니다.');
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -72,27 +76,34 @@ const Navbar = () => {
               </a>
             </li>
 
-            <li className="nav-item d-flex align-items-center">
+            <li className="nav-item d-flex align-items-center ms-2 gap-2"> {/* gap-2로 버튼 사이 간격 줌 */}
               {isMounted && accessToken ? (
                 <>
+                  {/* 마이페이지 버튼: 주황색 테두리 */}
                   <a 
-                    className="btn btn-sm btn-info mb-0 ms-2" 
+                    className="btn btn-nav-custom btn-nav-mypage" 
                     href="/myPage"
                   >
+                    <i className="bi bi-person-fill"></i> {/* 아이콘 추가 */}
                     My Page
                   </a>
+                  
+                  {/* 로그아웃 버튼: 회색 */}
                   <button 
-                    className="btn btn-sm btn-danger mb-0 ms-2"
+                    className="btn btn-nav-custom btn-nav-logout"
                     onClick={handleLogout}
                   >
+                    <i className="bi bi-box-arrow-right"></i> {/* 아이콘 추가 */}
                     Log Out
                   </button>
                 </>
               ) : (
+                /* 로그인 버튼: 주황색 배경 */
                 <a 
-                  className="btn btn-sm btn-primary mb-0 ms-2" 
+                  className="btn btn-nav-custom btn-nav-login" 
                   href="/login"
                 >
+                  <i className="bi bi-box-arrow-in-right"></i> {/* 아이콘 추가 */}
                   Log In
                 </a>
               )}

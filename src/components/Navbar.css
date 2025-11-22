@@ -1,0 +1,60 @@
+/* Navbar.css */
+
+/* 공통 버튼 스타일 (모양 잡기) */
+.btn-nav-custom {
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important; /* 아이콘과 글자 사이 간격 */
+  transition: all 0.2s ease !important;
+  margin-bottom: 0 !important; /* 부트스트랩 마진 초기화 */
+  border: none !important;
+}
+
+/* 1. 로그인 버튼 (브랜드 컬러 꽉 채움) */
+.btn-nav-login {
+  background-color: #e94d1c !important;
+  color: #fff !important;
+  box-shadow: 0 4px 6px rgba(233, 77, 28, 0.2) !important;
+}
+
+.btn-nav-login:hover {
+  background-color: #d03e12 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(233, 77, 28, 0.3) !important;
+}
+
+/* 2. 마이페이지 버튼 (하얀 배경 + 주황 테두리) */
+.btn-nav-mypage {
+  background-color: transparent !important;
+  border: 1px solid #e94d1c !important;
+  color: #e94d1c !important;
+}
+
+.btn-nav-mypage:hover {
+  background-color: #e94d1c !important; /* 호버하면 주황색으로 채워짐 */
+  color: #fff !important;
+  transform: translateY(-2px);
+}
+
+/* 3. 로그아웃 버튼 (차분한 회색) */
+.btn-nav-logout {
+  background-color: #f1f3f5 !important;
+  color: #666 !important;
+}
+
+.btn-nav-logout:hover {
+  background-color: #e9ecef !important;
+  color: #333 !important;
+  /* 로그아웃은 너무 튀지 않게 살짝만 진해짐 */
+}
+
+/* 버튼 안의 아이콘 크기 조정 */
+.btn-nav-custom i {
+  font-size: 16px !important;
+  position: relative;
+  top: -1px;
+}
