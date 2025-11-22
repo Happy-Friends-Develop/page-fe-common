@@ -34,7 +34,7 @@ jobs:
       - name : Create commonApi.ts file
         run : |
           mkdir -p src/api/common
-          echo "${{ secrets.COMMON_API_TS }}" > src/api/admin/commonApi.ts
+          echo "${{ secrets.COMMON_API_TS }}" > src/api/common/commonApi.ts
 
       - name: Install, build, and upload your site
         uses: withastro/action@v4
