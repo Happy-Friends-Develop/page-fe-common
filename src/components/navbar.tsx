@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
 import { $accessToken, logout } from '../store/authStore';
 
-// [중요] 새로 만든 CSS 파일 임포트
 import './Navbar.css';
 
 const Navbar = () => {
@@ -14,7 +13,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    if (confirm("로그아웃 하시겠습니까?")) { // 실수 방지용 확인창 추가 (선택사항)
+    if (confirm("로그아웃 하시겠습니까?")) { 
       logout();
       alert('로그아웃 되었습니다.');
       window.location.href = '/';
