@@ -1,0 +1,147 @@
+/* LoginForm.css */
+
+/* 화면 중앙 정렬 및 배경 */
+.login-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  padding: 20px; /* 모바일 배려 */
+}
+
+/* 카드 디자인 */
+.login-card {
+  background: #fff;
+  border-radius: 16px; /* 더 둥글고 부드럽게 */
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* 더 깊고 부드러운 그림자 */
+  border: none;
+  text-align: center; /* 내부 요소 중앙 정렬 */
+}
+
+/* 타이틀 스타일 */
+.login-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: 15px;
+  color: #888;
+  margin-bottom: 35px;
+}
+
+/* 입력창 아이콘 */
+.custom-input-group {
+  position: relative !important;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* 아이콘 위치 잡기 */
+.custom-input-group .input-icon {
+  position: absolute !important;
+  top: 50% !important;
+  left: 18px !important;
+  transform: translateY(-50%) !important;
+
+  /* [핵심!] 색상 강제 적용 */
+  color: #b0b0b0 !important;
+  font-size: 20px !important;
+
+  /* [여기 추가됨!] 폰트가 깨지는 걸 방지하기 위해 폰트 패밀리를 강제로 지정 */
+  font-family: "bootstrap-icons" !important;
+  font-style: normal;
+  font-weight: normal !important;
+  line-height: 1;
+
+  z-index: 100 !important;
+  display: block !important;
+  transition: color 0.3s ease;
+}
+/* 입력창 커스텀 */
+.custom-input {
+  padding-left: 50px !important; /* 아이콘이 들어갈 공간 확보 */
+  height: 52px;
+  border-radius: 12px !important;
+  border: 1px solid #e0e0e0;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #fcfcfc;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* 입력창 포커스 시 효과 */
+.custom-input:focus {
+  border-color: #e94d1c;
+  box-shadow: 0 0 0 4px rgba(233, 77, 28, 0.15); /* 부드러운 주황색 빛 */
+  background-color: #fff;
+}
+
+/* 입력창 포커스 시 아이콘 색상 변경 */
+.custom-input:focus + .input-icon, /* 혹시 순서가 바뀌었을 때를 대비 */
+.custom-input-group:focus-within .input-icon {
+  color: #e94d1c !important;
+}
+
+.btn-brand {
+  background-color: #e94d1c !important;
+  border-color: #e94d1c !important;
+  color: #fff !important;
+
+  height: 52px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 12px rgba(233, 77, 28, 0.3);
+}
+
+/* 버튼 호버(마우스 올렸을 때) 효과 */
+.btn-brand:hover:not(:disabled) {
+  background-color: #d03e12; /* 조금 더 진한 주황색 */
+  border-color: #d03e12;
+  transform: translateY(-3px); /* 살짝 떠오르는 느낌 */
+  box-shadow: 0 6px 15px rgba(233, 77, 28, 0.4);
+}
+
+/* 버튼 클릭 효과 */
+.btn-brand:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(233, 77, 28, 0.3);
+}
+
+/* 로딩 중 버튼 스타일 */
+.btn-brand:disabled {
+  background-color: #f4cba7;
+  border-color: #f4cba7;
+  color: #fff;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* 하단 링크 */
+.login-footer {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #888;
+}
+
+.login-footer a {
+  color: #e94d1c; /* 링크도 주황색으로 */
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.2s;
+}
+
+.login-footer a:hover {
+  color: #c03910;
+  text-decoration: underline;
+}
