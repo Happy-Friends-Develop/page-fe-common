@@ -30,7 +30,7 @@ const LoginForm = () => {
 
       if (success && token) {
         setToken(token); 
-        alert('로그인 성공!');
+        alert('로그인 성공');
         window.location.href = '/'; 
       } else {
         alert(errorMessage || '로그인에 실패했습니다.');
