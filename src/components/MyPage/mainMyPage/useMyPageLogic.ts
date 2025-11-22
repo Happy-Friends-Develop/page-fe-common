@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { $accessToken, logout } from "../../store/authStore";
-import { userClient } from "../../api/index";
-import type { UserResponse, UserUpdateRequest } from "../../api/user/userApi";
-import { showSuccess, showError, showConfirm, showPrompt } from "../../utils/swal";
+import { $accessToken, logout } from "../../../store/authStore";
+import { userClient } from "../../../api/index";
+import type { UserResponse, UserUpdateRequest } from "../../../api/user/userApi";
+import { showSuccess, showError, showConfirm, showPrompt } from "../../../utils/swal";
 
 export const useMyPageLogic = () => {
   const accessToken = useStore($accessToken);

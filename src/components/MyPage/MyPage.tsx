@@ -1,8 +1,8 @@
 import React from "react";
-import { useMyPageLogic } from "./useMyPageLogic";
-import ProfileHeader from "./ProfileHeader";
-import InfoCard from "./InfoCard";
-import EditUserModal from "./EditUserModal";
+import { useMyPageLogic } from "./mainMyPage/useMyPageLogic";
+import ProfileHeader from "./mainMyPage/ProfileHeader";
+import InfoCard from "./mainMyPage/InfoCard";
+import EditUserModal from "./mainMyPage/EditUserModal";
 import "./MyPage.css";
 
 const MyPage = () => {

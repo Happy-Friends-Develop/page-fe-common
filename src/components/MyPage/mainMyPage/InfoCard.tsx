@@ -1,5 +1,5 @@
 import React from 'react';
-import type { UserResponse } from '../../api/user/userApi';
+import type { UserResponse } from '../../../api/user/userApi';
 
 interface Props {
   userInfo: UserResponse;

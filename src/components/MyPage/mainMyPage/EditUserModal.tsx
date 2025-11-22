@@ -1,6 +1,6 @@
 import React from 'react';
 import DaumPostcode from "react-daum-postcode";
-import type { UserUpdateRequest } from '../../api/user/userApi';
+import type { UserUpdateRequest } from '../../../api/user/userApi';
 
 interface Props {
   isOpen: boolean;
