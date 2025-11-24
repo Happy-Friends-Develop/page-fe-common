@@ -18,9 +18,9 @@ const BoardAllPage = () => {
           {/* 필터 버튼 */}
           <div className="filter-container mt-4">
             <FilterButton label="전체" isActive={activeType === undefined} onClick={() => setActiveType(undefined)} />
-            <FilterButton label="🍕 먹거리" isActive={activeType === "EAT"} onClick={() => setActiveType("EAT")} />
-            <FilterButton label="🎡 놀거리" isActive={activeType === "PLAY"} onClick={() => setActiveType("PLAY")} />
-            <FilterButton label="🏠 잘거리" isActive={activeType === "STAY"} onClick={() => setActiveType("STAY")} />
+            <FilterButton label="먹거리" isActive={activeType === "EAT"} onClick={() => setActiveType("EAT")} />
+            <FilterButton label="놀거리" isActive={activeType === "PLAY"} onClick={() => setActiveType("PLAY")} />
+            <FilterButton label="잘거리" isActive={activeType === "STAY"} onClick={() => setActiveType("STAY")} />
           </div>
         </div>
       </div>
