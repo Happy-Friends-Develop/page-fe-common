@@ -1,4 +1,3 @@
-// components/BoardCard.tsx
 import React, { useState } from 'react';
 import type { BoardResponse } from '../../../api/user/userApi';
 
