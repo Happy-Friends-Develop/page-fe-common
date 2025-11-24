@@ -1,22 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import { userClient } from '../../../api/index'; // userClient 경로 확인
+import { userClient } from '../../../api/index';
 import type { CommentResponse } from '../../../api/user/userApi';
 
 export const useBoardComments = (boardId: string | undefined) => {
   const [comments, setComments] = useState<CommentResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 데이터를 가져오는 함수를 따로 만듭니다.
+  // 1. 조회 (Fetch)
   const fetchComments = useCallback(async () => {
     if (!boardId) return;
-    
-    // 로딩 시작 (원하면 삭제해도 됨, 깜빡임 방지하려면 삭제 추천)
-    // setIsLoading(true); 
-
     try {
       const id = Number(boardId);
       const response = await userClient.api.getComments(id, { format: 'json' });
-
       if (response.data.success && response.data.data) {
         setComments(response.data.data);
       }
@@ -27,11 +22,66 @@ export const useBoardComments = (boardId: string | undefined) => {
     }
   }, [boardId]);
 
-  // 컴포넌트가 처음 보일 때(boardId가 변경될 때) 실행
+  // 2. 생성 (Create)
+  const createComment = useCallback(async (content: string, parentId?: number) => {
+    if (!boardId) return;
+    try {
+      await userClient.api.createComment(
+        Number(boardId),
+        { content, parentId },
+        { format: 'json' }
+      );
+      await fetchComments(); // 성공 시 목록 새로고침
+      return true;
+    } catch (error) {
+      console.error("댓글 작성 실패:", error);
+      alert("댓글 작성에 실패했습니다.");
+      return false;
+    }
+  }, [boardId, fetchComments]);
+
+  // 3. 수정 (Update)
+  const updateComment = useCallback(async (commentId: number, content: string) => {
+    try {
+      await userClient.api.updateComment(
+        commentId,
+        { content },
+        { format: 'json' }
+      );
+      await fetchComments();
+      return true;
+    } catch (error) {
+      console.error("댓글 수정 실패:", error);
+      alert("수정 권한이 없거나 오류가 발생했습니다.");
+      return false;
+    }
+  }, [fetchComments]);
+
+  // 4. 삭제 (Delete)
+  const deleteComment = useCallback(async (commentId: number) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return false;
+    try {
+      await userClient.api.deleteComment(commentId, { format: 'json' });
+      await fetchComments();
+      return true;
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+      alert("삭제 권한이 없거나 오류가 발생했습니다.");
+      return false;
+    }
+  }, [fetchComments]);
+
+  // 초기 로딩
   useEffect(() => {
     fetchComments();
   }, [fetchComments]);
 
-  // refetch 함수를 밖으로 내보냅니다!
-  return { comments, isLoading, refetch: fetchComments };
+  return { 
+    comments, 
+    isLoading, 
+    createComment, 
+    updateComment, 
+    deleteComment,
+    refetch: fetchComments 
+  };
 };
