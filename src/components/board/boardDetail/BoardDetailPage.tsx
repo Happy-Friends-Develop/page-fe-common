@@ -1,4 +1,7 @@
 import React from 'react';
+import { useStore } from '@nanostores/react';
+import { $user } from '../../../store/authStore';
+import { userClient } from '../../../api/index';
 import { useBoardDetail } from './useBoardDetail';
 import CommentList from './CommentList';
 import './BoardAllPage.css';
@@ -11,6 +14,32 @@ interface Props {
 
 const BoardDetailPage = ({ boardId }: Props) => {
   const { board, isLoading } = useBoardDetail(boardId);
+  const user = useStore($user);
+  const isOwner = board && user?.nickname === board.authorNickname;
+
+  // 게시글 삭제 핸들러
+  const handleDelete = async () => {
+    if (!boardId) return;
+    if (!window.confirm("정말 이 게시글을 삭제하시겠습니까? 복구할 수 없습니다.")) return;
+
+    try {
+      const response = await userClient.api.deleteBoard(Number(boardId), { format: 'json' });
+      
+      if (response.data.success) {
+        alert("게시글이 삭제되었습니다.");
+        window.location.href = "/board"; // 삭제 후 목록으로 이동
+      } else {
+        alert(response.data.errorMessage || "삭제 실패");
+      }
+    } catch (error) {
+      console.error("게시글 삭제 중 오류:", error);
+      alert("오류가 발생했습니다.");
+    }
+  };
+
+  const handleEdit = () => {
+    window.location.href = `/board/write?mode=edit&id=${boardId}`; 
+  };
 
   if (isLoading) {
     return (
@@ -32,11 +61,31 @@ const BoardDetailPage = ({ boardId }: Props) => {
           
           {/* 헤더 (제목, 작성자, 날짜) */}
           <div className="border-bottom pb-4 mb-4">
-            <div className="mb-3">
+            <div className="d-flex justify-content-between align-items-start mb-3">
                <span className="badge bg-light text-secondary border px-3 py-2 rounded-pill">
                  <i className="bi bi-geo-alt-fill text-danger me-1"></i>
                  {board.address || '위치 정보 없음'}
                </span>
+               
+               {/* 본인일 경우 수정/삭제 버튼 표시 */}
+               {isOwner && (
+                 <div className="d-flex gap-2">
+                   <button 
+                     onClick={handleEdit} 
+                     className="btn btn-sm btn-outline-secondary"
+                     style={{ fontSize: '0.8rem' }}
+                   >
+                     수정
+                   </button>
+                   <button 
+                     onClick={handleDelete} 
+                     className="btn btn-sm btn-outline-danger"
+                     style={{ fontSize: '0.8rem' }}
+                   >
+                     삭제
+                   </button>
+                 </div>
+               )}
             </div>
 
             <h1 className="fw-bold mb-3" style={{ fontSize: '1.8rem', color: '#333' }}>

@@ -1,0 +1,16 @@
+---
+// src/pages/board/write.astro
+
+import Navbar from '../../components/navbar';
+import Layout from '../../layouts/Layout.astro'; 
+import BoardWritePage from '../../components/board/boardDetail/BoardWritePage';
+import '../../../assets/scss/astro-ecommerce.scss';
+
+---
+
+<Layout title="게시글 작성">
+  <main>
+    <Navbar client:load />
+    <BoardWritePage client:only="react" />
+  </main>
+</Layout>

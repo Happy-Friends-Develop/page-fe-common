@@ -1,0 +1,63 @@
+/* src/components/board/boardDetail/BoardWritePage.css */
+
+/* 전체 컨테이너 */
+.board-write-container {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+/* 메인 카드 영역 */
+.board-write-card-body {
+    padding: 40px;
+}
+
+/* 페이지 제목 */
+.board-write-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    border-bottom: 2px solid #e94d1c; /* 포인트 컬러 */
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+/* 파일 업로드 박스 */
+.file-upload-box {
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+/* 마우스 올렸을 때 효과 */
+.file-upload-box:hover {
+    border-color: #e94d1c;
+    background-color: #fff5f2; /* 아주 연한 주황색 배경 */
+}
+
+/* 업로드된 파일 리스트 */
+.file-list-area {
+    margin-top: 15px;
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+}
+
+.file-count {
+    color: #e94d1c;
+    font-weight: bold;
+}
+
+/* textarea 크기 조절 방지 */
+.no-resize {
+    resize: none;
+}
+
+/* select 커서 포인터 */
+.cursor-pointer {
+    cursor: pointer;
+}
