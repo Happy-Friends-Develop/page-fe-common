@@ -1,7 +1,12 @@
-import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
-import { $accessToken, $user, setToken, logout as storeLogout } from '../store/authStore';
-import type { TokenPayload, LoginRequest, UserInfo } from '../store/authStore';
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import {
+  $accessToken,
+  $user,
+  setToken,
+  logout as storeLogout,
+} from "../store/authStore";
+import type { TokenPayload, LoginRequest, UserInfo } from "../store/authStore";
 
 // API 응답 타입 정의
 interface ApiResponse<T> {
@@ -16,8 +21,8 @@ interface ApiResponse<T> {
  */
 export const sanitizeToken = (token: string | null): string | null => {
   if (!token) return null;
-  if (token.trim() === '') {
-    console.warn('토큰이 비어있습니다.');
+  if (token.trim() === "") {
+    console.warn("토큰이 비어있습니다.");
     return null;
   }
   return token;
@@ -29,11 +34,11 @@ export const sanitizeToken = (token: string | null): string | null => {
 export const decodeToken = (token: string): TokenPayload | null => {
   const sanitizedToken = sanitizeToken(token);
   if (!sanitizedToken) return null;
-  
+
   try {
     return jwtDecode<TokenPayload>(sanitizedToken);
   } catch (error) {
-    console.error('토큰 디코딩 실패:', error);
+    console.error("토큰 디코딩 실패:", error);
     return null;
   }
 };
@@ -44,7 +49,7 @@ export const decodeToken = (token: string): TokenPayload | null => {
 export const isTokenExpired = (token: string): boolean => {
   const decoded = decodeToken(token);
   if (!decoded) return true;
-  
+
   const currentTime = Date.now() / 1000;
   return decoded.exp < currentTime;
 };
@@ -55,23 +60,23 @@ export const isTokenExpired = (token: string): boolean => {
 export const validateAndCleanToken = (): boolean => {
   try {
     const accessToken = $accessToken.get();
-    
+
     if (!accessToken) return false;
-    
+
     const sanitizedToken = sanitizeToken(accessToken);
     if (!sanitizedToken) {
-      console.warn('유효하지 않은 토큰이 감지되었습니다.');
+      console.warn("유효하지 않은 토큰이 감지되었습니다.");
       return false;
     }
-    
+
     if (isTokenExpired(sanitizedToken)) {
-      console.warn('만료된 토큰이 감지되었습니다.');
+      console.warn("만료된 토큰이 감지되었습니다.");
       return false;
     }
-    
+
     return true;
   } catch (error) {
-    console.error('토큰 검증 중 오류:', error);
+    console.error("토큰 검증 중 오류:", error);
     return false;
   }
 };
@@ -82,14 +87,14 @@ export const validateAndCleanToken = (): boolean => {
 export const isAuthenticated = (): boolean => {
   try {
     const accessToken = $accessToken.get();
-    
+
     if (!accessToken) {
       return false;
     }
-    
+
     return validateAndCleanToken();
   } catch (error) {
-    console.error('인증 상태 확인 중 오류:', error);
+    console.error("인증 상태 확인 중 오류:", error);
     return false;
   }
 };
@@ -97,15 +102,17 @@ export const isAuthenticated = (): boolean => {
 /**
  * 인증 헤더 생성 (Bearer 토큰)
  */
-export const getAuthHeader = (): { Authorization: string } | Record<string, never> => {
+export const getAuthHeader = ():
+  | { Authorization: string }
+  | Record<string, never> => {
   try {
     const accessToken = $accessToken.get();
-    
+
     if (!accessToken) return {};
-    
+
     return { Authorization: `${accessToken}` };
   } catch (error) {
-    console.error('인증 헤더 생성 중 오류:', error);
+    console.error("인증 헤더 생성 중 오류:", error);
     return {};
   }
 };
@@ -115,12 +122,12 @@ export const getAuthHeader = (): { Authorization: string } | Record<string, neve
  */
 export const logout = (): void => {
   try {
-    storeLogout(); 
+    storeLogout();
   } catch (error) {
-    console.error('로그아웃 처리 중 오류:', error);
+    console.error("로그아웃 처리 중 오류:", error);
   }
 };
-// 기존처럼 export const logout을 쓰고 싶다면 import한 logout과 이름이 겹치므로 
+// 기존처럼 export const logout을 쓰고 싶다면 import한 logout과 이름이 겹치므로
 // import { logout as storeLogout } from ... 처럼 이름을 바꿔서 가져와야 합니다.
 // 편의상 여기서는 위 함수를 그대로 쓰시되, 필요하면 이름을 맞추세요.
 
@@ -129,38 +136,42 @@ export const logout = (): void => {
  */
 export const login = async (credentials: LoginRequest): Promise<boolean> => {
   try {
-    const apiBaseUrl = import.meta.env.VITE_API_URL || '';
-    
+    const apiBaseUrl = import.meta.env.VITE_API_URL || "";
+
     const response = await axios.post<ApiResponse<string>>(
       `${apiBaseUrl}/api/auth`,
       credentials,
       {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" },
       }
     );
-    
+
     const result = response.data;
-    
+
     if (!result.success || !result.data) {
-      console.error('로그인 실패:', result.errorMessage || '알 수 없는 오류');
+      console.error("로그인 실패:", result.errorMessage || "알 수 없는 오류");
       return false;
     }
-    
+
     const token = result.data;
-    
+
     if (!token) {
-      console.error('서버에서 받은 토큰이 유효하지 않습니다.');
+      console.error("서버에서 받은 토큰이 유효하지 않습니다.");
       return false;
     }
-    
+
     setToken(token);
-    
+
     return true;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('로그인 API 에러:', error.response?.status, error.response?.data);
+      console.error(
+        "로그인 API 에러:",
+        error.response?.status,
+        error.response?.data
+      );
     } else {
-      console.error('로그인 처리 중 예외 발생:', error);
+      console.error("로그인 처리 중 예외 발생:", error);
     }
     return false;
   }
@@ -173,32 +184,30 @@ export const getUserInfo = (): UserInfo | null => {
   try {
     let user = $user.get();
     const accessToken = $accessToken.get();
-    
-    // 1. 스토어에 이미 사용자 정보가 있으면 반환
+
     if (user) return user;
-    
-    // 2. 없으면 토큰에서 새로 추출 시도
     if (!accessToken) return null;
-    
+
     const decoded = decodeToken(accessToken);
     if (!decoded) return null;
-    
-    const authoritiesArray = typeof decoded.authorities === 'string' 
-      ? decoded.authorities.split(',') 
-      : decoded.authorities || [];
 
-    // 사용자 정보 재구성
+    const authoritiesArray =
+      typeof decoded.authorities === "string"
+        ? decoded.authorities.split(",")
+        : decoded.authorities || [];
+
     const userInfo: UserInfo = {
       id: decoded.id,
       type: decoded.type,
-      authorities: authoritiesArray
+      authorities: authoritiesArray,
+      nickname: decoded.nickname, 
     };
-    
+
     $user.set(userInfo);
-    
+
     return userInfo;
   } catch (error) {
-    console.error('사용자 정보 조회 중 오류:', error);
+    console.error("사용자 정보 조회 중 오류:", error);
     return null;
   }
 };
@@ -209,16 +218,16 @@ export const getUserInfo = (): UserInfo | null => {
 export const hasRole = (role: string): boolean => {
   const userInfo = getUserInfo();
   if (!userInfo || !userInfo.authorities) return false;
-  
+
   if (Array.isArray(userInfo.authorities)) {
     return userInfo.authorities.includes(role);
   }
-  
+
   // @ts-ignore: 타입 안전장치
-  if (typeof userInfo.authorities === 'string') {
-    return (userInfo.authorities as string).split(',').includes(role);
+  if (typeof userInfo.authorities === "string") {
+    return (userInfo.authorities as string).split(",").includes(role);
   }
-  
+
   return false;
 };
 
@@ -228,6 +237,6 @@ export const hasRole = (role: string): boolean => {
 export const hasUserType = (type: string): boolean => {
   const userInfo = getUserInfo();
   if (!userInfo || !userInfo.type) return false;
-  
+
   return userInfo.type === type;
 };
