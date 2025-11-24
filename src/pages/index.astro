@@ -28,7 +28,7 @@ import OrderSummaries from '../components/order/orderSummaries';
 import OrderHistory from '../components/order/orderHistory';
 import IncentiveLarge from '../components/incentives/incentiveLarge';
 import IncentiveCols from '../components/incentives/incentiveCols';
-import BoardListSection from '../components/board/BoardListSection';
+import BoardListSection from '../components/board/boardList/BoardListSection';
 
 let cartItems = [];
 data.shoppingCart.map(id => 
@@ -81,18 +81,16 @@ data.orders.forEach((order) => {
     <Navbar />
     <div class="container mt-5">
     <Layout title="Astro Ecommerce">
-    <main>
-    <Navbar />
-    
+    <main>    
     <div class="container mt-5">
       
       <BoardListSection client:visible />
 
-      <hr class="my-5 border-light" /> <h3>Product Lists</h3>
+      <hr class="my-5 border-light" /> 
+      <h3>Product Lists</h3>
       </div>
   </main>
 </Layout>
-      <h3>Product Lists</h3>
       <p>Components and blocks for Product Lists</p>
       <div class="row mt-5">
         {data.products.map(product => 
