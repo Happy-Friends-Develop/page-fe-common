@@ -4,8 +4,8 @@ import { useBoardList } from './useBoardList';
 import BoardCard from './BoardCard'; 
 
 const BoardListSection = () => {
-  // 훅을 사용해서 로직을 가져옴 (설명서 펼치기)
-  const { boards, isLoading, activeType, setActiveType } = useBoardList();
+    // 메인페이지는 4개만 불러오기
+  const { boards, isLoading, activeType, setActiveType } = useBoardList(4);
 
   return (
     <section className="my-5">
