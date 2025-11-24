@@ -7,7 +7,7 @@ import { ErrorHandler } from '../utils/errorHandler';
 // 공통 설정 (토큰 자동 주입 & 에러 처리)
 const apiConfig: ApiConfig = {
   // 백엔드 주소 
-  baseUrl: import.meta.env.PUBLIC_API_URL || 'http://localhost:8080',
+  baseUrl: import.meta.env.PUBLIC_API_URL || '',
 
   // 요청 보낼 때마다 토큰이 있으면 자동으로 헤더에 넣기
   securityWorker: (securityData) => {
