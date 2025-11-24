@@ -1,0 +1,100 @@
+/* BoardAllPage.css */
+
+/* 전체 배경 */
+.board-page-container {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+/* 헤더 디자인 */
+.board-header {
+  background: white;
+  padding: 50px 0 40px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  text-align: center;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* 타이틀 */
+.board-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+/* 제목 밑줄 포인트 */
+.board-title::after {
+  content: '';
+  display: block;
+  width: 50%;
+  height: 4px;
+  background-color: #e94d1c; /* 포인트 컬러 */
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* 부제목 */
+.board-subtitle {
+  color: #888;
+  font-size: 15px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+/* 필터 버튼 영역 */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.filter-btn {
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #eee;
+  background-color: white;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  color: #e94d1c;
+  border-color: #e94d1c;
+}
+
+.filter-btn.active {
+  background-color: #222;
+  color: white;
+  border-color: #222;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 로딩 및 빈 화면 메시지 */
+.loading-container {
+  padding: 80px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.empty-message {
+  padding: 100px 0;
+  text-align: center;
+  color: #bbb;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  width: 100%;
+}

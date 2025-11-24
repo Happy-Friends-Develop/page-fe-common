@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/navbar';
+import BoardDetailPage from '../../components/board/boardDetail/BoardDetailPage.tsx';
+import '../../../assets/scss/astro-ecommerce.scss';
+
+// URL에서 id 꺼내기
+const { id } = Astro.params;
+
+// SSR 모드 사용 (서버 사이드 렌더링)
+export const prerender = false;
+---
+
+<Layout title="게시글 상세 | Happy Friends">
+  <main>
+    {/* 상단 메뉴바 */}
+    <Navbar client:load />
+    
+    {/* 상세 페이지 컴포넌트 (id 전달) */}
+    <BoardDetailPage client:load boardId={id} />
+  </main>
+</Layout>
