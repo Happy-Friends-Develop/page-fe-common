@@ -4,7 +4,8 @@ import type { BoardResponse } from '../../../api/user/userApi';
 
 export type BoardType = "EAT" | "PLAY" | "STAY" | undefined;
 
-export const useBoardList = () => {
+// [수정] limit 인자를 받도록 변경 (값이 없으면 0으로 처리)
+export const useBoardList = (limit: number = 0) => {
   const [boards, setBoards] = useState<BoardResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeType, setActiveType] = useState<BoardType>(undefined);
@@ -16,8 +17,16 @@ export const useBoardList = () => {
         { boardType: type },
         { format: 'json' }
       );
+
       if (response.data.success && response.data.data) {
-        setBoards(response.data.data.slice(0, 4));
+        const allData = response.data.data;
+        
+        // limit이 0보다 크면 자르고, 아니면 전체 다 보여주기
+        if (limit > 0) {
+            setBoards(allData.slice(0, limit));
+        } else {
+            setBoards(allData);
+        }
       }
     } catch (error) {
       console.error("게시글 로딩 실패:", error);
@@ -28,8 +37,7 @@ export const useBoardList = () => {
 
   useEffect(() => {
     fetchBoards(activeType);
-  }, [activeType]);
+  }, [activeType]); // activeType이 바뀔 때마다 다시 불러옴
 
-  // 뷰(View)에서 필요한 것들만 보따리에 싸서 내보내요
   return { boards, isLoading, activeType, setActiveType };
 };
