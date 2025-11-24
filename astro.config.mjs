@@ -1,12 +1,13 @@
 import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
 import react from "@astrojs/react";
+import node from '@astrojs/node';
 
-// https://astro.build/config
 export default defineConfig({
+  output: 'server',
+
   integrations: [react()],
-  site: 'https://creativetimofficial.github.io',  
+  site: 'https://creativetimofficial.github.io',
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -17,4 +18,8 @@ export default defineConfig({
       },
     },
   },
+
+  adapter: node({
+    mode: 'standalone',
+  }),
 });

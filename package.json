@@ -13,6 +13,7 @@
     "gen:api:local": "node generate-api.js local"
   },
   "dependencies": {
+    "@astrojs/node": "^9.5.1",
     "@astrojs/react": "^4.2.2",
     "@nanostores/react": "^1.0.0",
     "@types/react": "^18.0.21",
