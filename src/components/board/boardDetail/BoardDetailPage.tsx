@@ -1,5 +1,6 @@
 import React from 'react';
 import { useBoardDetail } from './useBoardDetail';
+import CommentList from './CommentList';
 import './BoardAllPage.css';
 
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || '';
@@ -26,12 +27,11 @@ const BoardDetailPage = ({ boardId }: Props) => {
   return (
     <div className="board-page-container py-5">
       <div className="container">
-        {/* 게시글 컨테이너*/}
+        {/* 게시글 컨테이너 */}
         <div className="bg-white rounded-4 shadow-sm p-4 p-lg-5 mx-auto" style={{ maxWidth: '800px' }}>
           
           {/* 헤더 (제목, 작성자, 날짜) */}
           <div className="border-bottom pb-4 mb-4">
-            {/* 카테고리/지역 배지 */}
             <div className="mb-3">
                <span className="badge bg-light text-secondary border px-3 py-2 rounded-pill">
                  <i className="bi bi-geo-alt-fill text-danger me-1"></i>
@@ -57,12 +57,11 @@ const BoardDetailPage = ({ boardId }: Props) => {
             </div>
           </div>
 
-          {/* 미디어 영역 (이미지/동영상) */}
+          {/* 미디어 영역 */}
           {board.files && board.files.length > 0 && (
             <div className="d-flex flex-column gap-3 mb-5">
               {board.files.map((file) => {
                 const folder = file.fileType === 'VIDEO' ? '/videos/' : '/images/';
-                // 썸네일 말고 원본 파일 경로 사용
                 const src = `${API_BASE_URL}${folder}${file.filePath}`;
 
                 return (
@@ -83,8 +82,8 @@ const BoardDetailPage = ({ boardId }: Props) => {
             {board.content}
           </div>
 
-          {/* 하단 버튼 (목록으로, 좋아요) */}
-          <div className="d-flex justify-content-center gap-3 border-top pt-4">
+          {/* 하단 버튼 */}
+          <div className="d-flex justify-content-center gap-3 border-top pt-4 mb-4">
             <a href="/board" className="btn btn-outline-secondary px-4 rounded-pill">
               <i className="bi bi-list me-1"></i> 목록으로
             </a>
@@ -92,6 +91,9 @@ const BoardDetailPage = ({ boardId }: Props) => {
               <i className="bi bi-heart me-1"></i> 좋아요
             </button>
           </div>
+
+          {/* 댓글 영역 */}
+          <CommentList boardId={boardId} />
 
         </div>
       </div>
