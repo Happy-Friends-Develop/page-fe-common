@@ -55,7 +55,6 @@ const BoardListSection = () => {
   );
 };
 
-// 간단한 버튼 컴포넌트는 같은 파일에 둬도 괜찮아요 (너무 작으니까요)
 const FilterButton = ({ label, isActive, onClick }: { label: string, isActive: boolean, onClick: () => void }) => (
   <button 
     className={`btn btn-sm ${isActive ? 'btn-dark' : 'btn-outline-secondary'}`}
