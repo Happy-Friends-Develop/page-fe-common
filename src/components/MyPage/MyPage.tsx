@@ -3,12 +3,15 @@ import { useMyPageLogic } from "./mainMyPage/useMyPageLogic";
 import ProfileHeader from "./mainMyPage/ProfileHeader";
 import InfoCard from "./mainMyPage/InfoCard";
 import EditUserModal from "./mainMyPage/EditUserModal";
+import MyActivityTabs from "./mainMyPage/MyActivityTabs";
 import "./MyPage.css";
 
 const MyPage = () => {
-  // 1. 훅에서 모든 기능과 상태를 가져옵니다.
+  // 1. 훅에서 데이터와 상태를 가져옵니다.
   const { 
-    userInfo, 
+    userInfo,
+    myComments, 
+    likedBoards,
     isLoading, 
     modalState, 
     formState, 
@@ -31,16 +34,21 @@ const MyPage = () => {
   return (
     <div className="container mt-5 mb-5">
       
+      {/* 프로필 헤더 */}
       <ProfileHeader 
         userInfo={userInfo} 
         onOpenEdit={modalState.open} 
         onLogout={logout} 
       />
 
+      {/* 내 정보 카드 */}
       <InfoCard userInfo={userInfo} />
 
-      {/* 3. 하단 탈퇴 버튼 */}
-      <div className="d-flex justify-content-end">
+      {/* 활동 내역 탭 (좋아요 목록 / 내 댓글) */}
+      <MyActivityTabs comments={myComments} likedBoards={likedBoards} />
+
+      {/* 하단 탈퇴 버튼 */}
+      <div className="d-flex justify-content-end mt-4">
         <button
           className="btn btn-link text-secondary text-decoration-none btn-sm"
           onClick={handleDeleteUser}
@@ -49,7 +57,7 @@ const MyPage = () => {
         </button>
       </div>
 
-      {/* 4. 수정 모달 팝업 */}
+      {/* 수정 모달 팝업 */}
       <EditUserModal
         isOpen={modalState.isOpen}
         onClose={modalState.close}
