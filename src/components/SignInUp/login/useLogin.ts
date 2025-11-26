@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { commonClient } from '../../../api/index'; // 경로 확인 필요
-import { setToken } from '../../../store/authStore'; // 경로 확인 필요
-import { showSuccess, showError } from '../../../utils/swal'; // 경로 확인 필요
+import { commonClient } from '../../../api/index'; 
+import { setToken } from '../../../store/authStore'; 
+import { showSuccess, showError, handleApiError } from '../../../utils/swal'; 
 
 export const useLogin = () => {
   // 상태 관리
@@ -9,7 +9,7 @@ export const useLogin = () => {
   const [pwd, setPwd] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 입력 핸들러 (필요하다면 커스텀 가능하지만, 직접 set 함수 써도 무방)
+  // 입력 핸들러
   const handleChangeId = (e: React.ChangeEvent<HTMLInputElement>) => setLoginId(e.target.value);
   const handleChangePwd = (e: React.ChangeEvent<HTMLInputElement>) => setPwd(e.target.value);
 
@@ -41,19 +41,18 @@ export const useLogin = () => {
         await showSuccess('환영합니다!', '성공적으로 로그인되었습니다.');
         window.location.href = '/'; 
       } else {
-        // 4. 실패 처리 (백엔드 메시지)
+        // 4. 실패 처리 (아이디/비번 틀림 등 로직 에러)
         showError('로그인 실패', errorMessage || '아이디 또는 비밀번호를 확인해주세요.');
       }
 
     } catch (error) {
-      console.error('Login Error:', error);
-      showError('서버 오류', '서버 통신 중 오류가 발생했습니다.');
+      // 5. 그 외 서버 에러
+      handleApiError(error, '서버 오류', '로그인 처리 중 문제가 발생했습니다.');
     } finally {
       setIsLoading(false); 
     }
   };
 
-  // 뷰(Component)에서 필요한 것만 내보내기
   return {
     formState: {
       loginId,

@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { userClient } from '../../../api/index'; 
 import type { UserRequest } from '../../../api/user/userApi'; 
-import { showSuccess, showError } from '../../../utils/swal'; 
+import { showSuccess, showError, handleApiError } from '../../../utils/swal'; 
 
 export const useSignup = () => {
   // 1. 상태 관리
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpenPost, setIsOpenPost] = useState(false);      // 주소 모달
-  const [isIdModalOpen, setIsIdModalOpen] = useState(false); // 아이디 모달
-  const [detailAddress, setDetailAddress] = useState('');   // 상세 주소
+  const [isOpenPost, setIsOpenPost] = useState(false);      
+  const [isIdModalOpen, setIsIdModalOpen] = useState(false); 
+  const [detailAddress, setDetailAddress] = useState('');   
 
   const [formData, setFormData] = useState<UserRequest>({
     id: '',
@@ -68,7 +68,7 @@ export const useSignup = () => {
         address: `${formData.address} ${detailAddress}`
       };
 
-      // API 호출 (JSON 포맷 지정 필수)
+      // API 호출
       const response = await userClient.api.register(finalData, { format: 'json' });
       
       if (response.ok) {
@@ -80,14 +80,13 @@ export const useSignup = () => {
       }
 
     } catch (error) {
-      console.error('Signup Error:', error);
-      showError('오류', '서버 통신 중 오류가 발생했습니다.');
+      // 네트워크 에러나 서버 터짐(500) 등을 예쁜 팝업으로 처리
+      handleApiError(error, '오류', '회원가입 처리 중 문제가 발생했습니다.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 뷰(Component)에 필요한 것들만 정리해서 내보냄
   return {
     formState: {
       formData,

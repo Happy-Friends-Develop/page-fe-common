@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { userClient } from '../../../api/index';
-import { showSuccess, showError } from '../../../utils/swal'; 
+import { showSuccess, showError, handleApiError } from '../../../utils/swal'; 
 import type { CheckIdModalProps } from './types';
 
 export const useCheckId = ({ onComplete }: Pick<CheckIdModalProps, 'onComplete'>) => {
@@ -10,7 +10,6 @@ export const useCheckId = ({ onComplete }: Pick<CheckIdModalProps, 'onComplete'>
   // 입력값 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempId(e.target.value);
-    // 글자가 바뀌면 다시 검사해야 하므로 false로 변경
     setIsChecked(false);
   };
 
@@ -27,7 +26,6 @@ export const useCheckId = ({ onComplete }: Pick<CheckIdModalProps, 'onComplete'>
         { format: 'json' } 
       );
       
-      // 백엔드 로직 유지: data가 false여야 "중복 아님(사용 가능)"
       if (response.data.success && response.data.data === false) {
         await showSuccess('사용 가능', '사용 가능한 아이디입니다.');
         setIsChecked(true);
@@ -37,8 +35,7 @@ export const useCheckId = ({ onComplete }: Pick<CheckIdModalProps, 'onComplete'>
         setIsChecked(false);
       }
     } catch (error) {
-      console.error(error);
-      showError('오류', '중복 확인 중 문제가 발생했습니다. (서버 연결 확인)');
+      handleApiError(error, '오류', '중복 확인 중 문제가 발생했습니다.');
     }
   };
 
