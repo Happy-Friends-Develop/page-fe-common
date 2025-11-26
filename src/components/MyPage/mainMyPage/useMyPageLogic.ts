@@ -3,7 +3,7 @@ import { useStore } from "@nanostores/react";
 import { $accessToken, logout } from "../../../store/authStore";
 import { userClient } from "../../../api/index";
 import type { UserResponse, UserUpdateRequest } from "../../../api/user/userApi";
-import { showSuccess, showError, showConfirm, showPrompt } from "../../../utils/swal";
+import { showSuccess, showError, showConfirm, showPrompt, handleApiError } from "../../../utils/swal";
 
 export const useMyPageLogic = () => {
   const accessToken = useStore($accessToken);
@@ -26,22 +26,25 @@ export const useMyPageLogic = () => {
         setUserInfo(response.data.data);
       }
     } catch (error) {
-      console.error(error);
+      handleApiError(error, "조회 실패", "정보를 불러오지 못했습니다.");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!accessToken) {
-      alert("로그인이 필요한 서비스입니다.");
-      window.location.href = "/login";
-      return;
-    }
-    fetchUserInfo();
+    const checkAuth = async () => {
+      if (!accessToken) {
+        await showConfirm("로그인 필요", "로그인이 필요한 서비스입니다.", "로그인하러 가기");
+        window.location.href = "/login";
+        return;
+      }
+      fetchUserInfo();
+    };
+    checkAuth();
   }, [accessToken]);
 
-  // 2. 모달 열기 (데이터 채우기)
+  // 2. 모달 열기
   const openEditModal = () => {
     if (userInfo) {
       setEditFormData({
@@ -50,7 +53,7 @@ export const useMyPageLogic = () => {
         phone: userInfo.phone || "",
         email: userInfo.email || "",
         address: userInfo.address || "",
-        birth: "", // birth는 타입 맞추기용 빈 값
+        birth: "", 
       });
     }
     setIsEditModalOpen(true);
@@ -99,8 +102,7 @@ export const useMyPageLogic = () => {
         showError('수정 실패', response.data?.errorMessage || "수정에 실패했습니다.");
       }
     } catch (error) {
-      console.error("Update Error:", error);
-      showError('오류', '수정 중 오류가 발생했습니다.');
+      handleApiError(error, '수정 실패', '수정 중 오류가 발생했습니다.');
     }
   };
 
@@ -130,11 +132,10 @@ export const useMyPageLogic = () => {
         showError('탈퇴 실패', response.data?.errorMessage || "탈퇴 처리에 실패했습니다.");
       }
     } catch (error) {
-      showError('오류', '탈퇴 처리 중 오류가 발생했습니다.');
+      handleApiError(error, '오류', '탈퇴 처리 중 오류가 발생했습니다.');
     }
   };
 
-  // 필요한 것들만 포장해서 내보내기
   return {
     userInfo,
     isLoading,
