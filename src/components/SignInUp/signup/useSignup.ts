@@ -80,7 +80,6 @@ export const useSignup = () => {
       }
 
     } catch (error) {
-      // 네트워크 에러나 서버 터짐(500) 등을 예쁜 팝업으로 처리
       handleApiError(error, '오류', '회원가입 처리 중 문제가 발생했습니다.');
     } finally {
       setIsLoading(false);
