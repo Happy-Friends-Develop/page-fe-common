@@ -1,7 +1,7 @@
 // BoardDetailView.tsx
 import React from 'react';
-import CommentList from './CommentList';
-import type { BoardDetailViewProps } from './types';
+import CommentList from '.././CommentList';
+import type { BoardDetailViewProps } from '.././types';
 import './BoardAllPage.css';
 
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || '';

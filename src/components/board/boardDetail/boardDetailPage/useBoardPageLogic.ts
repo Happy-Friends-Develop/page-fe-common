@@ -1,14 +1,14 @@
 import { useCallback } from "react";
 import { useStore } from "@nanostores/react";
-import { $user } from "../../../store/authStore";
-import { userClient } from "../../../api/index";
-import { useBoardDetail } from "./useBoardDetail";
+import { $user } from "../../../../store/authStore";
+import { userClient } from "../../../../api/index";
+import { useBoardDetail } from ".././useBoardDetail";
 import {
   showConfirm,
   showSuccess,
   handleApiError,
   showError,
-} from "../../../utils/swal";
+} from "../../../../utils/swal";
 
 export const useBoardPageLogic = (boardId: string | undefined) => {
   const { board, isLoading, refetch } = useBoardDetail(boardId);
