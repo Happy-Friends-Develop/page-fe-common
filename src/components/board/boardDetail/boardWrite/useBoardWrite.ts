@@ -1,7 +1,7 @@
 // useBoardWrite.ts
 import { useEffect, useState, type ChangeEvent } from "react";
-import { userClient } from "../../../api/index";
-import type { BoardFileResponse } from "../../../api/user/userApi";
+import { userClient } from "../../../../api/index";
+import type { BoardFileResponse } from "../../../../api/user/userApi";
 
 export const useBoardWrite = () => {
   const searchParams = new URLSearchParams(window.location.search);

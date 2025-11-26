@@ -1,8 +1,8 @@
 // BoardWriteView.tsx
 import React from "react";
-import "./../../MyPage/MyPage.css";
+import ".././../../MyPage/MyPage.css";
 import "./BoardWritePage.css";
-import { type BoardWriteViewProps } from "./types";
+import { type BoardWriteViewProps } from ".././types";
 
 const BoardWriteView = ({
   isEditMode,
