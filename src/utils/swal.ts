@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const BRAND_COLOR = '#e94d1c';
 
@@ -53,4 +54,15 @@ export const showPrompt = async (title: string, text: string, placeholder: strin
     cancelButtonText: '취소',
   });
   return result.value; // 입력한 텍스트 반환
+};
+
+// 5. 스마트 에러 핸들러
+export const handleApiError = (error: any, title: string, text: string) => {
+  // 401 에러(로그인 만료)면 index.ts가 처리하니까 조용히 넘어감
+  if (error?.status === 401 || error?.response?.status === 401) {
+    return;
+  }
+  
+  // 진짜 에러일 때만 알림창 띄움
+  showError(title, text);
 };
