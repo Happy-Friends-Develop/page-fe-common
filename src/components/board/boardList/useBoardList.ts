@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { userClient } from '../../../api/index';
 import type { BoardResponse } from '../../../api/user/userApi';
-
+import { handleApiError } from '../../../utils/swal'; 
 export type BoardType = "EAT" | "PLAY" | "STAY" | undefined;
 
-// [수정] limit 인자를 받도록 변경 (값이 없으면 0으로 처리)
+// limit 인자를 받도록 변경 (값이 없으면 0으로 처리)
 export const useBoardList = (limit: number = 0) => {
   const [boards, setBoards] = useState<BoardResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +30,7 @@ export const useBoardList = (limit: number = 0) => {
       }
     } catch (error) {
       console.error("게시글 로딩 실패:", error);
+      handleApiError(error, "게시글 목록 조회 실패", "게시글 목록 조회에 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
