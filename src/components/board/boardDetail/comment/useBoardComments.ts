@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { userClient } from "../../../api/index";
-import type { CommentResponse } from "../../../api/user/userApi";
+import { userClient } from "../../../../api/index";
+import type { CommentResponse } from "../../../../api/user/userApi";
 import {
   handleApiError,
   showSuccess,
   showConfirm,
   showError,
-} from "../../../utils/swal";
+} from "../../../../utils/swal";
 
 export const useBoardComments = (boardId: string | undefined) => {
   const [comments, setComments] = useState<CommentResponse[]>([]);

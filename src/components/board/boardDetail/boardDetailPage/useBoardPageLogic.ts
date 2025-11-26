@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useStore } from "@nanostores/react";
 import { $user } from "../../../../store/authStore";
 import { userClient } from "../../../../api/index";
-import { useBoardDetail } from ".././useBoardDetail";
+import { useBoardDetail } from ".././comment/useBoardDetail";
 import {
   showConfirm,
   showSuccess,

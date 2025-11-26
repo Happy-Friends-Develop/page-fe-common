@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { CommentResponse } from '../../../api/user/userApi';
+import type { CommentResponse } from '../../../../api/user/userApi';
 
 interface CommentItemProps {
   comment: CommentResponse;

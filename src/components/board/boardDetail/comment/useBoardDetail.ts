@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { userClient } from "../../../api/index";
-import type { BoardResponse } from "../../../api/user/userApi";
-import { handleApiError } from "../../../utils/swal";
+import { userClient } from "../../../../api/index";
+import type { BoardResponse } from "../../../../api/user/userApi";
+import { handleApiError } from "../../../../utils/swal";
 
 export const useBoardDetail = (boardId: string | undefined) => {
   const [board, setBoard] = useState<BoardResponse | null>(null);

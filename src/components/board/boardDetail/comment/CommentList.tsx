@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStore } from "@nanostores/react";
-import { $user } from "../../../store/authStore";
+import { $user } from "../../../../store/authStore";
 import { useBoardComments } from "./useBoardComments";
 import CommentItem from "./CommentItem";
 

@@ -1,6 +1,6 @@
 // BoardDetailView.tsx
 import React from 'react';
-import CommentList from '.././CommentList';
+import CommentList from '.././comment/CommentList';
 import type { BoardDetailViewProps } from '.././types';
 import './BoardAllPage.css';
 
