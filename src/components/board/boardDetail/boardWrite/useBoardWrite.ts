@@ -1,7 +1,9 @@
 // useBoardWrite.ts
 import { useEffect, useState, type ChangeEvent } from "react";
-import { userClient } from "../../../../api/index";
+import axios from "axios"; 
+import { userClient } from "../../../../api/index"; 
 import type { BoardFileResponse } from "../../../../api/user/userApi";
+import { getAuthHeader } from "../../../../utils/authUtils"; 
 
 export const useBoardWrite = () => {
   const searchParams = new URLSearchParams(window.location.search);
@@ -9,12 +11,14 @@ export const useBoardWrite = () => {
   const boardId = searchParams.get("id");
   const isEditMode = mode === "edit";
 
+  const BASE_URL = import.meta.env.PUBLIC_API_URL; 
+
   // State
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [boardType, setBoardType] = useState("EAT");
   const [address, setAddress] = useState("");
-  
+
   // File State
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [existingFiles, setExistingFiles] = useState<BoardFileResponse[]>([]);
@@ -47,20 +51,17 @@ export const useBoardWrite = () => {
     }
   }, [isEditMode, boardId]);
 
-  // 핸들러: 파일 선택
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSelectedFiles(Array.from(e.target.files));
     }
   };
 
-  // 핸들러: 기존 파일 삭제
   const handleRemoveExistingFile = (fileId: number) => {
     setDeleteFileIds((prev) => [...prev, fileId]);
     setExistingFiles((prev) => prev.filter((file) => file.id !== fileId));
   };
 
-  // 핸들러: 취소
   const handleCancel = () => {
     window.history.back();
   };
@@ -80,26 +81,28 @@ export const useBoardWrite = () => {
         deleteFileIds,
       };
 
-      const boardRequestJson = JSON.stringify(boardData);
+      const formData = new FormData();
+      formData.append("boardRequest", JSON.stringify(boardData));
+
+      if (selectedFiles.length > 0) {
+        selectedFiles.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+
+      const authHeaders = getAuthHeader();
+      
+      const config = {
+        headers: {
+          ...authHeaders,
+        }
+      };
 
       if (isEditMode && boardId) {
-        await userClient.api.updateBoard(
-          Number(boardId),
-          {
-            boardRequest: boardRequestJson,
-            files: selectedFiles.length > 0 ? selectedFiles : undefined,
-          },
-          { format: "json" }
-        );
+        await axios.put(`${BASE_URL}/api/user/board/${boardId}`, formData, config);
         alert("게시글이 수정되었습니다!");
       } else {
-        await userClient.api.createBoard(
-          {
-            boardRequest: boardRequestJson,
-            files: selectedFiles,
-          },
-          { format: "json" }
-        );
+        await axios.post(`${BASE_URL}/api/user/board`, formData, config);
         alert("새 글이 등록되었습니다!");
       }
 
@@ -110,7 +113,6 @@ export const useBoardWrite = () => {
     }
   };
 
-  // View에서 필요한 모든 값과 함수 반환
   return {
     isEditMode,
     title, setTitle,
@@ -122,6 +124,6 @@ export const useBoardWrite = () => {
     handleFileChange,
     handleRemoveExistingFile,
     handleSubmit,
-    handleCancel
+    handleCancel,
   };
 };
