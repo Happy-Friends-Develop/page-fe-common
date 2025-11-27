@@ -1,5 +1,6 @@
 // BoardWriteView.tsx
 import React from "react";
+import DaumPostcode from "react-daum-postcode";
 import ".././../../MyPage/MyPage.css";
 import "./BoardWritePage.css";
 import { type BoardWriteViewProps } from ".././types";
@@ -15,8 +16,40 @@ const BoardWriteView = ({
   handleFileChange,
   handleRemoveExistingFile,
   handleSubmit,
-  handleCancel
+  handleCancel,
+  // [추가] 주소 검색 관련 Props
+  isPostOpen,
+  setIsPostOpen,
+  handleAddressComplete,
 }: BoardWriteViewProps) => {
+
+  // 모달 스타일 (중앙 정렬 팝업)
+  const modalStyle = {
+    position: "fixed" as const,
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 1000,
+    background: "#fff",
+    padding: "20px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    width: "400px", // 필요에 따라 조절 가능
+    maxWidth: "90%",
+  };
+
+  // 모달 배경 스타일 (어두운 배경)
+  const overlayStyle = {
+    position: "fixed" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 999,
+  };
+
   return (
     <div className="container board-write-container">
       <div className="main-content">
@@ -53,16 +86,29 @@ const BoardWriteView = ({
                 </select>
               </div>
             </div>
+            
             <div className="col-md-6">
               <div className="edit-form-group">
                 <label className="edit-label">장소 (선택)</label>
-                <input
-                  type="text"
-                  className="edit-input"
-                  placeholder="주소를 입력하세요"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
+                <div className="d-flex gap-2">
+                  <input
+                    type="text"
+                    className="edit-input"
+                    placeholder="주소 검색 버튼을 눌러주세요"
+                    value={address}
+                    readOnly // 직접 입력 방지
+                    onClick={() => setIsPostOpen(true)} // 클릭 시 검색창 열기
+                    style={{ cursor: "pointer", backgroundColor: "#fff" }}
+                  />
+                  <button 
+                    className="btn btn-secondary btn-sm" 
+                    type="button"
+                    onClick={() => setIsPostOpen(true)}
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    주소 검색
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -157,6 +203,28 @@ const BoardWriteView = ({
               {isEditMode ? "수정 완료" : "등록하기"}
             </button>
           </div>
+
+          {/* 다음 주소 검색 모달 */}
+          {isPostOpen && (
+            <>
+              {/* 배경 클릭 시 닫기 */}
+              <div style={overlayStyle} onClick={() => setIsPostOpen(false)} />
+              
+              {/* 모달 창 */}
+              <div style={modalStyle}>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h5 className="m-0 fw-bold">주소 검색</h5>
+                  <button 
+                    className="btn-close" 
+                    onClick={() => setIsPostOpen(false)}
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <DaumPostcode onComplete={handleAddressComplete} />
+              </div>
+            </>
+          )}
+
         </div>
       </div>
     </div>

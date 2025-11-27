@@ -1,13 +1,13 @@
 // types.ts
 import type { BoardResponse } from '../../../api/user/userApi';
-import { type ChangeEvent } from "react";
+import { type ChangeEvent, type Dispatch, type SetStateAction } from "react";
 import type { BoardFileResponse } from "../../../api/user/userApi";
 
 // 뷰(UI) 컴포넌트가 받을 Props 정의
 export interface BoardDetailViewProps {
   isLoading: boolean;
   board: BoardResponse | null;
-  isOwner: boolean; // 내가 쓴 글인지 여부
+  isOwner: boolean;
   onDelete: () => void;
   onEdit: () => void;
   onGoBack: () => void;
@@ -33,4 +33,7 @@ export interface BoardWriteViewProps {
   handleRemoveExistingFile: (fileId: number) => void;
   handleSubmit: () => void;
   handleCancel: () => void;
+  isPostOpen: boolean;
+  setIsPostOpen: Dispatch<SetStateAction<boolean>>;
+  handleAddressComplete: (data: any) => void;
 }
