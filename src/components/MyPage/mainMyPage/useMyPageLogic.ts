@@ -24,6 +24,7 @@ export const useMyPageLogic = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPostOpen, setIsPostOpen] = useState(false);
+  const [myBoards, setMyBoards] = useState<BoardResponse[]>([]);
   const [myComments, setMyComments] = useState<MyCommentResponse[]>([]);
   const [likedBoards, setLikedBoards] = useState<BoardResponse[]>([]);
   const [editFormData, setEditFormData] = useState<UserUpdateRequest>({
@@ -46,6 +47,17 @@ export const useMyPageLogic = () => {
       handleApiError(error, "조회 실패", "정보를 불러오지 못했습니다.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchMyBoards = async () => {
+    try {
+      const response = await userClient.api.getBoardListByUser({ format: "json" });
+      if (response.data.success && response.data.data) {
+        setMyBoards(response.data.data);
+      }
+    } catch (error) {
+      console.error("내가 쓴 글 조회 실패", error);
     }
   };
 
@@ -91,6 +103,7 @@ export const useMyPageLogic = () => {
       // 병렬로 요청하여 속도 향상
       await Promise.all([
         fetchUserInfo(),
+        fetchMyBoards(),
         fetchMyComments(),
         fetchLikedBoards(),
       ]);
@@ -205,6 +218,7 @@ export const useMyPageLogic = () => {
 
   return {
     userInfo,
+    myBoards,
     myComments,
     likedBoards,
     isLoading,

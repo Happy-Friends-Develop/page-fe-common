@@ -10,6 +10,7 @@ const MyPage = () => {
   // 1. 훅에서 데이터와 상태를 가져옵니다.
   const { 
     userInfo,
+    myBoards, // [추가]
     myComments, 
     likedBoards,
     isLoading, 
@@ -44,8 +45,12 @@ const MyPage = () => {
       {/* 내 정보 카드 */}
       <InfoCard userInfo={userInfo} />
 
-      {/* 활동 내역 탭 (좋아요 목록 / 내 댓글) */}
-      <MyActivityTabs comments={myComments} likedBoards={likedBoards} />
+      {/* 활동 내역 탭 (내가 쓴 글 / 좋아요 / 댓글) */}
+      <MyActivityTabs 
+        myBoards={myBoards} 
+        comments={myComments} 
+        likedBoards={likedBoards} 
+      />
 
       {/* 하단 탈퇴 버튼 */}
       <div className="d-flex justify-content-end mt-4">

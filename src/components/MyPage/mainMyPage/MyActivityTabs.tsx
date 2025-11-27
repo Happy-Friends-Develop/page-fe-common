@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import type { MyCommentResponse, BoardResponse } from "../../../api/user/userApi";
 
 interface MyActivityTabsProps {
+  myBoards: BoardResponse[];
   comments: MyCommentResponse[];
   likedBoards: BoardResponse[];
 }
 
-const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
-  const [activeTab, setActiveTab] = useState<"LIKES" | "COMMENTS">("LIKES");
+const MyActivityTabs = ({ myBoards, comments, likedBoards }: MyActivityTabsProps) => {
+  const [activeTab, setActiveTab] = useState<"POSTS" | "LIKES" | "COMMENTS">("POSTS");
 
-  // 날짜 포맷팅 함수
   const formatDate = (dateString?: string) => {
     if (!dateString) return "-";
     return new Date(dateString).toLocaleDateString();
@@ -19,6 +19,14 @@ const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
     <div className="card mt-4 shadow-sm border-0">
       <div className="card-header bg-white border-bottom-0">
         <ul className="nav nav-tabs card-header-tabs">
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === "POSTS" ? "active fw-bold text-primary" : "text-muted"}`}
+              onClick={() => setActiveTab("POSTS")}
+            >
+              📝 내가 쓴 글 ({myBoards.length})
+            </button>
+          </li>
           <li className="nav-item">
             <button
               className={`nav-link ${activeTab === "LIKES" ? "active fw-bold text-primary" : "text-muted"}`}
@@ -39,7 +47,38 @@ const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
       </div>
 
       <div className="card-body p-0">
-        {/* 좋아요 목록 */}
+        {/* 1. 내가 쓴 글 목록 */}
+        {activeTab === "POSTS" && (
+          <div className="list-group list-group-flush">
+            {myBoards.length === 0 ? (
+              <div className="p-4 text-center text-muted">작성한 게시글이 없습니다.</div>
+            ) : (
+              myBoards.map((board) => (
+                <a
+                  key={board.id}
+                  href={`/board/${board.id}`}
+                  className="list-group-item list-group-item-action p-3"
+                >
+                  <div className="d-flex w-100 justify-content-between">
+                    <h6 className="mb-1 text-truncate fw-bold" style={{ maxWidth: "70%" }}>
+                      {board.title}
+                    </h6>
+                    <small className="text-muted">{formatDate(board.createdAt)}</small>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center mt-2">
+                    <small className="text-secondary">{board.address || "장소 미지정"}</small>
+                    <div className="text-muted small">
+                      <span className="me-2">👁️ {board.view}</span>
+                      <span>❤️ {board.wishListCount}</span>
+                    </div>
+                  </div>
+                </a>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* 2. 좋아요 목록 */}
         {activeTab === "LIKES" && (
           <div className="list-group list-group-flush">
             {likedBoards.length === 0 ? (
@@ -48,7 +87,7 @@ const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
               likedBoards.map((board) => (
                 <a
                   key={board.id}
-                  href={`/board/${board.id}`} // 게시글 상세 페이지 이동
+                  href={`/board/${board.id}`}
                   className="list-group-item list-group-item-action p-3"
                 >
                   <div className="d-flex w-100 justify-content-between">
@@ -70,7 +109,7 @@ const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
           </div>
         )}
 
-        {/* 댓글 목록 */}
+        {/* 3. 댓글 목록 */}
         {activeTab === "COMMENTS" && (
           <div className="list-group list-group-flush">
             {comments.length === 0 ? (
@@ -79,7 +118,7 @@ const MyActivityTabs = ({ comments, likedBoards }: MyActivityTabsProps) => {
               comments.map((comment) => (
                 <a
                   key={comment.commentId}
-                  href={`/board/${comment.boardId}`} // 해당 게시글로 이동
+                  href={`/board/${comment.boardId}`}
                   className="list-group-item list-group-item-action p-3"
                 >
                   <div className="d-flex w-100 justify-content-between">
