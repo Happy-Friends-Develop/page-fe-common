@@ -41,8 +41,14 @@
   display: block;
 }
 
+/* 입력창 & 버튼 높이 통일 변수 */
+:root {
+  --nearby-input-height: 60px; /* 검색 버튼 높이와 맞춤 */
+}
+
 /* 입력창 공통 스타일 */
 .nearby-input {
+  height: var(--nearby-input-height);
   border: 1px solid #eaeaea;
   border-radius: 8px;
   padding: 10px 15px;
@@ -68,6 +74,19 @@
   border-bottom-right-radius: 8px !important;
   transition: all 0.2s;
   z-index: 0;
+  height: var(--nearby-input-height) !important; 
+  width: var(--nearby-input-height); 
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -1px; 
+}
+
+.input-group .nearby-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  flex: 1; 
 }
 
 .btn-location:hover {
@@ -126,6 +145,7 @@
   width: 100%;
   transition: all 0.2s ease;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: var(--nearby-input-height);
 }
 
 .btn-nearby-search:hover {

@@ -1,5 +1,6 @@
 import React from 'react';
 import './NearbySearch.css';
+
 interface NearbySearchProps {
   address: string;
   setAddress: (val: string) => void;
@@ -20,6 +21,7 @@ const NearbySearch = ({
   return (
     <div className="card nearby-card mb-5">
       
+      {/* 타이틀 */}
       <h4 className="nearby-title">
         <i className="bi bi-map-fill"></i>
         내 주변 탐색
