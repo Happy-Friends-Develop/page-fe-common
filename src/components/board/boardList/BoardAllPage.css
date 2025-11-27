@@ -101,19 +101,19 @@
 
 /* 글쓰기 버튼 (포인트 컬러 적용) */
 .btn-write {
-  background-color: #e94d1c; /* 타이틀 밑줄 색상과 통일 */
-  color: white;
-  border: none;
-  padding: 10px 28px;
-  border-radius: 50px; /* 둥근 캡슐 모양 */
-  font-weight: 700;
-  font-size: 15px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px; /* 아이콘과 텍스트 사이 간격 */
-  box-shadow: 0 4px 15px rgba(233, 77, 28, 0.3); /* 은은한 주황색 그림자 */
-  transition: all 0.3s ease;
-  text-decoration: none; /* a태그 밑줄 제거 */
+  background-color: #e94d1c !important; /* 타이틀 밑줄 색상과 통일 */
+  color: white !important;
+  border: none !important;
+  padding: 10px 28px !important;
+  border-radius: 50px !important; /* 둥근 캡슐 모양 */
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important; /* 아이콘과 텍스트 사이 간격 */
+  box-shadow: 0 4px 15px rgba(233, 77, 28, 0.3) !important; /* 은은한 주황색 그림자 */
+  transition: all 0.3s ease !important;
+  text-decoration: none !important; /* a태그 밑줄 제거 */
 }
 
 .btn-write:hover {
